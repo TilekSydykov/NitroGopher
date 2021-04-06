@@ -1,0 +1,101 @@
+<nav class="navbar navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand" href="#">NitroGopher</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-2">
+      <br>
+      <ul class="list-unstyled">
+        <li>
+          <h6 class="click" [class]="files.main? 'text-success': 'text-secondary'" (click)="select('main')">
+            Main
+          </h6>
+        </li>
+        <li>
+          <h6 class="click" [class]="files.about? 'text-success': 'text-secondary'" (click)="select('about')">
+            About Project
+          </h6>
+        </li>
+        <hr>
+        <li>
+          <h6 class="click" [class]="files.signin? 'text-success': 'text-secondary'" (click)="select('signin')">
+            Sign In
+          </h6>
+        </li>
+        <li>
+          <h6 class="click" [class]="files.signup? 'text-success': 'text-secondary'" (click)="select('signup')">
+            Sign Un
+          </h6>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-10">
+      <div *ngIf="files.signin">
+        <br>
+        <h2 class="col-12 text-center text-success">Sign In</h2>
+        <br>
+        <div>
+          <div class="card main-card">
+            <div class="card-body">
+              <label>Email</label>
+              <input class="form-control" name="Email" [(ngModel)]="user.Email" type="text">
+              <br>
+              <label>Password</label>
+              <input class="form-control" name="Password" [(ngModel)]="user.Password" type="password">
+              <br>
+              <button (click)="login()" class="btn btn-outline-dark">Sign In</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="files.signup">
+        <br>
+        <h2 class="col-12 text-center text-success">Sign Up</h2>
+        <br>
+        <div>
+          <div class="card main-card">
+            <div class="card-body">
+              <label>Email</label>
+              <input class="form-control" name="Email" [(ngModel)]="user.Email" type="text">
+              <br>
+              <label>Password</label>
+              <input class="form-control" name="Password" [(ngModel)]="user.Password" type="password">
+              <br>
+              <label>Password Again</label>
+              <input class="form-control" name="Password" [(ngModel)]="user.Password" type="password">
+              <br>
+              <button (click)="register()" class="btn btn-outline-dark">Sign Up</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="files.about">
+        <br>
+        <h2 class="col-12 text-center text-success">About</h2>
+        <br>
+        <p class="text-gray-dark card-text lead">
+          Written with Golang & Angular
+        </p>
+        <hr>
+        <p  class="text-gray-dark card-text lead">
+          Created by Tilek Sydykov 2021
+        </p>
+      </div>
+      <div *ngIf="files.main">
+        <br>
+        <h2 class="col-12 text-center text-success">Nitro Gopher</h2>
+        <br>
+        <p class="text-gray-dark card-text lead">
+          Are you tired to write same code again and again? If yes, you are in right place.
+          <b class="text-success">Nitro Gopher</b> - is platform where you can build simple API with models.
+          All things you need to do is create models. Database migrations, database table creation, rest api endpoints
+          and jwt authentication will be creates with our automatic system.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+

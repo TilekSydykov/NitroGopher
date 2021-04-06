@@ -1,1 +1,34 @@
 /* You can add global styles to this file, and also import other style files */
+.click{
+  cursor: pointer;
+}
+
+.parent-hover:hover .child-hover{
+  opacity: 1;
+}
+.child-hover{
+  opacity: 0;
+  transition: 0.5s;
+}
+body{
+  font-size: 0.9em !important;
+}
+
+.small-input{
+  padding: 0 5px;
+  background: white;
+  width: 100%;
+  margin: 0;
+  border: 1px solid grey;
+  border-radius: 3px;
+}
+
+.small-button{
+  border: none;
+  background: black;
+  color: white;
+  margin: 0;
+  padding: 3px 5px;
+  border-radius: 3px;
+}
+
