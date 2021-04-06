@@ -37,12 +37,41 @@
               </div>
             </div>
           </span>
-          <h3 *ngIf="!editSelected" class="card-title" (click)="editSelected = true">
+          <h3 *ngIf="!editSelected" class="card-title" >
             {{ selectedDbConn.name }}
+            &nbsp;
+            <i class="fa fa-edit" (click)="editSelected = true"></i>
           </h3>
         </div>
         <div class="card-body">
-
+          <div class="form-group">
+            <label for="host">Host:</label>
+            <input *ngIf="editSelected" [(ngModel)]="selectedDbConn.URL" type="text" class="form-control" id="host"  aria-describedby="emailHelp" placeholder="db.example.com">
+            <h3 *ngIf="!editSelected" >
+              {{ selectedDbConn.URL }}
+            </h3>
+          </div>
+          <div class="form-group">
+            <label for="dbname">db name:</label>
+            <input  *ngIf="editSelected" [(ngModel)]="selectedDbConn.DBName" type="text" class="form-control" id="dbname" aria-describedby="emailHelp" placeholder="name">
+            <h3 *ngIf="!editSelected"  >
+              {{ selectedDbConn.DBName }}
+            </h3>
+          </div>
+          <div class="form-group">
+            <label for="dbuser">db user:</label>
+            <input *ngIf="editSelected" [(ngModel)]="selectedDbConn.DBUser" type="text" class="form-control" id="dbuser" aria-describedby="emailHelp" placeholder="username">
+            <h3 *ngIf="!editSelected" >
+              {{ selectedDbConn.DBUser }}
+            </h3>
+          </div>
+          <div class="form-group">
+            <label for="dbpassword">db password:</label>
+            <input *ngIf="editSelected" [(ngModel)]="selectedDbConn.Password" type="text" class="form-control" id="dbpassword" aria-describedby="emailHelp" placeholder="password">
+            <h3 *ngIf="!editSelected"  >
+              {{ selectedDbConn.Password }}
+            </h3>
+          </div>
         </div>
       </div>
       <div class="card">

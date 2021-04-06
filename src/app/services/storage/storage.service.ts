@@ -15,8 +15,6 @@ export class StorageService {
   token: string | null = null;
   user: User | null = null;
 
-
-
   constructor() {
     this._endpoints = [];
   }
