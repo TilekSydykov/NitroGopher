@@ -1,5 +1,7 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {User} from "../../models/user";
+import {Project} from '../../builder/models/Project';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +12,7 @@ export class StorageService {
   token: string | null = null;
   user: User | null = null;
 
+  projects: Observable<Array<Project>> = new Observable<Array<Project>>();
   constructor() {
 
   }
