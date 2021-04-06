@@ -1,10 +1,9 @@
-import {EndPoint} from './EndPoint';
 import {DBConnection} from './DBConnection';
 
 export class Project {
   ID: number = 0;
-  Name: string = "";
+  name: string = "";
 
-  EndPoints: Array<EndPoint> = [];
-  DbConnection: DBConnection = new DBConnection();
+  endPoints: Array<number> = [];
+  dbConnection: number = 0;
 }

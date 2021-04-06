@@ -1,5 +1,4 @@
-export class EndPoint {
+export class Model {
   ID: number = 0;
   name: string = "";
-
 }

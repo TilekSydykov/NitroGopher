@@ -1,1 +1,68 @@
-<p>projects works!</p>
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0">Projects</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active">Projects</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+      <ul class="list-unstyled">
+        <li *ngFor="let project of projects" style="cursor: pointer">
+          <hr>
+          <i (click)="selectedProject = project">{{ project.name }}</i>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-9">
+      <div class="card">
+        <div class="card-header ui-sortable-handle">
+          <span *ngIf="editSelected">
+            <div class="row">
+              <div class="col">
+                <input type="text" class="form-control" [(ngModel)]="selectedProject.name">
+              </div>
+              <div class="col">
+                <button class="btn btn-success" (click)="saveSelected()">Ok</button>
+              </div>
+            </div>
+          </span>
+          <h3 *ngIf="!editSelected" class="card-title" (click)="editSelected = true">
+            {{ selectedProject.name }}
+          </h3>
+        </div>
+        <div class="card-body">
+
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header ui-sortable-handle">
+          <h3 class="card-title">
+            Создать проект
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <input type="text" name="name" placeholder="Name" class="form-control" [(ngModel)]="newProject.name">
+            </div>
+            <div class="col-md-6">
+              <button class="btn btn-danger" (click)="createProject()">Создать</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
