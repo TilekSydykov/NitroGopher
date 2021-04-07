@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {Project} from '../../builder/models/Project';
-import {StorageService} from '../../services/storage/storage.service';
+import {IHash, StorageService} from '../../services/storage/storage.service';
 import {EndPoint} from '../../builder/models/EndPoint';
+import {IHashPaginator} from '../../util/IHashPaginator';
+import {Model} from '../../builder/models/Model';
 
 @Component({
   selector: 'app-end-points',
@@ -10,11 +12,12 @@ import {EndPoint} from '../../builder/models/EndPoint';
 })
 export class EndPointsComponent implements OnInit {
 
-  endpoints: Array<EndPoint> = new Array<EndPoint>();
+  endpoints: IHash<EndPoint> = {};
   selectedEndPoint: EndPoint = new EndPoint();
   newEndpoint: EndPoint = new EndPoint();
 
   editSelected: boolean = false;
+  paginator: IHashPaginator<EndPoint> = new IHashPaginator<EndPoint>();
   constructor(
     private storageService: StorageService
   ) {
@@ -24,15 +27,20 @@ export class EndPointsComponent implements OnInit {
   ngOnInit(): void {
     this.storageService.endpoints.subscribe((endp) => {
       this.endpoints = endp;
-      if(this.selectedEndPoint.ID == 0 && endp.length > 0){
-        this.selectedEndPoint = endp[0]
+      for (let projectsKey in endp) {
+        if(endp.hasOwnProperty(projectsKey)){
+          this.selectedEndPoint = endp[projectsKey];
+          break;
+        }
       }
+      this.paginator.update(endp);
+      this.paginator.getPage();
     });
     this.storageService.updateEndPoints();
   }
 
   createEndPoint(){
-    this.newEndpoint.ID = Math.floor(Math.random() * 999_999_999);
+    this.newEndpoint.ID = ""+Math.floor(Math.random() * 999_999_999);
     this.storageService.addEndPoint(this.newEndpoint);
     this.newEndpoint = new EndPoint();
   }

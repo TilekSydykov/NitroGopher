@@ -6,6 +6,10 @@ import {EndPoint} from '../../builder/models/EndPoint';
 import {Model} from '../../builder/models/Model';
 import {DBConnection} from '../../builder/models/DBConnection';
 
+export interface IHash<T> {
+  [details: string] : T;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,7 +20,8 @@ export class StorageService {
   user: User | null = null;
 
   constructor() {
-    this._endpoints = [];
+    this._endpoints = {};
+    this._projects = {};
   }
 
   logOut(){
@@ -54,35 +59,17 @@ export class StorageService {
   }
 
   // Project
-  _projects: Array<Project> = new Array<Project>();
-  projects: EventEmitter<Array<Project>> = new EventEmitter<Array<Project>>();
-
-  getProjects(): Observable<Array<Project>>{
-    return this.projects
-  }
+  _projects: IHash<Project> = {};
+  projects: EventEmitter<IHash<Project>> = new EventEmitter<IHash<Project>>();
 
   addProject(p: Project){
-    this._projects.push(p);
+    this._projects[p.ID] = p;
     this.saveProjects();
     this.updateProjects();
   }
 
-  findProjectById(id: number): Project {
-    // @ts-ignore
-    this._projects.forEach(i => {
-      if(id == i.ID){
-        return i
-      }
-    });
-    return new Project();
-  }
-
   saveProject(project: Project) {
-    for (let i = 0; i < this._projects.length; i++) {
-      if(this._projects[i].ID == project.ID){
-        this._projects[i] = project;
-      }
-    }
+    this._projects[project.ID] = project;
     this.saveProjects();
     this.updateProjects();
   }
@@ -93,39 +80,25 @@ export class StorageService {
 
   updateProjects(){
     this._projects = JSON.parse(<string>localStorage.getItem("projects"));
+    if(this._projects == null){
+      this._projects = {}
+    }
     this.projects.emit(this._projects);
   }
 
   // EndPoint
 
-  _endpoints: Array<EndPoint> = [];
-  endpoints: EventEmitter<Array<EndPoint>> = new EventEmitter<Array<EndPoint>>();
-  getEndPoints(): Observable<Array<EndPoint>>{
-    return this.endpoints
-  }
+  _endpoints: IHash<EndPoint> = {};
+  endpoints: EventEmitter<IHash<EndPoint>> = new EventEmitter<IHash<EndPoint>>();
 
   addEndPoint(p: EndPoint){
-    this._endpoints.push(p);
+    this._endpoints[p.ID] = (p);
     this.saveEndPoints();
     this.updateEndPoints();
   }
 
-  findEndPointById(id: number): EndPoint {
-    // @ts-ignore
-    this._endpoints.forEach(i => {
-      if(id == i.ID){
-        return i
-      }
-    });
-    return new EndPoint();
-  }
-
   saveEndPoint(project: EndPoint) {
-    for (let i = 0; i < this._endpoints.length; i++) {
-      if(this._endpoints[i].ID == project.ID){
-        this._endpoints[i] = project;
-      }
-    }
+    this._endpoints[project.ID] = project;
     this.saveEndPoints();
     this.updateEndPoints();
   }
@@ -137,41 +110,26 @@ export class StorageService {
   updateEndPoints(){
     this._endpoints = JSON.parse(<string>localStorage.getItem("EndPoint"));
     if(this._endpoints == null){
-      this._endpoints = []
+      this._endpoints = {}
     }
     this.endpoints.emit(this._endpoints);
   }
 
   // DBConnection
 
-  _dbConnection: Array<DBConnection> = [];
-  dbConnection: EventEmitter<Array<DBConnection>> = new EventEmitter<Array<DBConnection>>();
-  getDBConnections(): Observable<Array<DBConnection>>{
-    return this.dbConnection
-  }
+  _dbConnection: IHash<DBConnection> = {};
+  dbConnection: EventEmitter<IHash<DBConnection>> = new EventEmitter<IHash<DBConnection>>();
+
 
   addDBConnection(p: DBConnection){
-    this._dbConnection.push(p);
+    this._dbConnection[p.ID] = (p);
     this.saveDBConnections();
     this.updateDBConnections();
   }
 
-  findDBConnectionById(id: number): DBConnection {
-    // @ts-ignore
-    this._dbConnection.forEach(i => {
-      if(id == i.ID){
-        return i
-      }
-    });
-    return new DBConnection();
-  }
 
   saveDBConnection(connection: DBConnection) {
-    for (let i = 0; i < this._dbConnection.length; i++) {
-      if(this._dbConnection[i].ID == connection.ID){
-        this._dbConnection[i] = connection;
-      }
-    }
+    this._dbConnection[connection.ID] = connection;
     this.saveDBConnections();
     this.updateDBConnections();
   }
@@ -183,41 +141,25 @@ export class StorageService {
   updateDBConnections(){
     this._dbConnection = JSON.parse(<string>localStorage.getItem("connection"));
     if(this._dbConnection == null){
-      this._dbConnection = []
+      this._dbConnection = {}
     }
     this.dbConnection.emit(this._dbConnection);
   }
 
   // Model
 
-  _models: Array<Model> = [];
-  models: EventEmitter<Array<Model>> = new EventEmitter<Array<Model>>();
-  getModels(): Observable<Array<Model>>{
-    return this.models
-  }
+  _models: IHash<Model> = {};
+  models: EventEmitter<IHash<Model>> = new EventEmitter<IHash<Model>>();
+
 
   addModel(p: Model){
-    this._models.push(p);
+    this._models[p.ID] = (p);
     this.saveModels();
     this.updateModels();
   }
 
-  findModelById(id: number): Model {
-    // @ts-ignore
-    this._models.forEach(i => {
-      if(id == i.ID){
-        return i
-      }
-    });
-    return new Model();
-  }
-
   saveModel(model: Model) {
-    for (let i = 0; i < this._models.length; i++) {
-      if(this._models[i].ID == model.ID){
-        this._models[i] = model;
-      }
-    }
+    this._models[model.ID] = model;
     this.saveModels();
     this.updateModels();
   }
@@ -229,7 +171,7 @@ export class StorageService {
   updateModels(){
     this._models = JSON.parse(<string>localStorage.getItem("Model"));
     if(this._models == null){
-      this._models = []
+      this._models = {}
     }
     this.models.emit(this._models);
   }

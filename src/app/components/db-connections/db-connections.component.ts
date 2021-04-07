@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {EndPoint} from '../../builder/models/EndPoint';
-import {StorageService} from '../../services/storage/storage.service';
+import {IHash, StorageService} from '../../services/storage/storage.service';
 import {DBConnection} from '../../builder/models/DBConnection';
+import {IHashPaginator} from '../../util/IHashPaginator';
+import {Model} from '../../builder/models/Model';
 
 @Component({
   selector: 'app-db-connections',
@@ -10,11 +12,13 @@ import {DBConnection} from '../../builder/models/DBConnection';
 })
 export class DbConnectionsComponent implements OnInit {
 
-  dbConnection: Array<DBConnection> = new Array<DBConnection>();
+  dbConnection: IHash<DBConnection> = {};
   selectedDbConn: DBConnection = new DBConnection();
   newConn: DBConnection = new DBConnection();
 
   editSelected: boolean = false;
+  paginator: IHashPaginator<DBConnection> = new IHashPaginator<DBConnection>();
+
   constructor(
     private storageService: StorageService
   ) {
@@ -24,15 +28,20 @@ export class DbConnectionsComponent implements OnInit {
   ngOnInit(): void {
     this.storageService.dbConnection.subscribe((endp) => {
       this.dbConnection = endp;
-      if(this.selectedDbConn.ID == 0 && endp.length > 0){
-        this.selectedDbConn = endp[0]
+      for (let projectsKey in endp) {
+        if(endp.hasOwnProperty(projectsKey)){
+          this.selectedDbConn = endp[projectsKey];
+          break;
+        }
       }
+      this.paginator.update(endp);
+      this.paginator.getPage();
     });
     this.storageService.updateDBConnections();
   }
 
   createConnection(){
-    this.newConn.ID = Math.floor(Math.random() * 999_999_999);
+    this.newConn.ID = ""+Math.floor(Math.random() * 999_999_999);
     this.storageService.addDBConnection(this.newConn);
     this.newConn = new DBConnection();
   }

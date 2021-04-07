@@ -1,5 +1,5 @@
 export class DBConnection {
-  ID: number = 0;
+  ID: string = "";
 
   name: string = "";
 

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {StorageService} from '../../services/storage/storage.service';
+import {IHash, StorageService} from '../../services/storage/storage.service';
 import {Model} from '../../builder/models/Model';
+import {IHashPaginator} from '../../util/IHashPaginator';
 
 @Component({
   selector: 'app-models',
@@ -9,11 +10,12 @@ import {Model} from '../../builder/models/Model';
 })
 export class ModelsComponent implements OnInit {
 
-  models: Array<Model> = new Array<Model>();
+  models: IHash<Model> = {};
   selectedModel: Model = new Model();
   newModel: Model = new Model();
 
   editSelected: boolean = false;
+  paginator: IHashPaginator<Model> = new IHashPaginator<Model>();
   constructor(
     private storageService: StorageService
   ) {
@@ -23,15 +25,20 @@ export class ModelsComponent implements OnInit {
   ngOnInit(): void {
     this.storageService.models.subscribe((endp) => {
       this.models = endp;
-      if(this.selectedModel.ID == 0 && endp.length > 0){
-        this.selectedModel = endp[0]
+      for (let projectsKey in endp) {
+        if(endp.hasOwnProperty(projectsKey)){
+          this.selectedModel = endp[projectsKey];
+          break;
+        }
       }
+      this.paginator.update(endp);
+      this.paginator.getPage();
     });
     this.storageService.updateModels();
   }
 
   createEndPoint(){
-    this.newModel.ID = Math.floor(Math.random() * 999_999_999);
+    this.newModel.ID = ""+Math.floor(Math.random() * 999_999_999);
     this.storageService.addModel(this.newModel);
     this.newModel = new Model();
   }
@@ -40,5 +47,7 @@ export class ModelsComponent implements OnInit {
     this.editSelected = false;
     this.storageService.saveModel(this.selectedModel);
   }
+
+
 
 }

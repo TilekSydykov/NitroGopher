@@ -18,7 +18,7 @@
   <div class="row">
     <div class="col-md-3">
       <ul class="list-unstyled">
-        <li *ngFor="let project of projects" style="cursor: pointer">
+        <li *ngFor="let project of paginator.currentPageList" style="cursor: pointer">
           <hr>
           <i (click)="selectedProject = project">{{ project.name }}</i>
         </li>
@@ -37,12 +37,34 @@
               </div>
             </div>
           </span>
-          <h3 *ngIf="!editSelected" class="card-title" (click)="editSelected = true">
+          <h3 *ngIf="!editSelected" class="card-title">
             {{ selectedProject.name }}
+            &nbsp;
+            <i class="fa fa-edit" (click)="editSelected = true"></i>
           </h3>
         </div>
         <div class="card-body">
-
+            <div>
+              <h5>Db connection</h5>
+              <div *ngIf="selectedProject.dbConnection == '' ">
+                <span class="text-secondary">No connection &nbsp; <i class="click fa fa-plus" (click)="editSelected = true"></i></span>
+              </div>
+              <div class="card">
+                <div class="card-body">
+                  <div *ngIf="editSelected">
+                    <label>
+                      Change connection
+                      <select [(ngModel)]="selectedProject.dbConnection" class="form-control">
+                        <option value="{{ conn.ID }}" *ngFor="let conn of connections">{{ conn.name }}</option>
+                      </select>
+                    </label>
+                  </div>
+                  <div *ngIf="!editSelected && selectedProject.dbConnection !== ''">
+                    {{ connectionsHash[selectedProject.dbConnection].name }}
+                  </div>
+                </div>
+              </div>
+            </div>
         </div>
       </div>
       <div class="card">
