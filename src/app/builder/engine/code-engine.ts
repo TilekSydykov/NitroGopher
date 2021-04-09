@@ -15,6 +15,9 @@ export class CodeEngine {
     p.codeVersion = p.version;
     let code = this.generateFirstPage();
     code += this.generateImports();
+    if(p.dbConnection != ""){
+      code += this.generateDBFunction(dbs[p.dbConnection]);
+    }
     code += this.generateMainFunction(p.port);
     return code;
   }
@@ -32,6 +35,16 @@ export class CodeEngine {
 
   generateImports(){
     return `import (\n"net/http"\n)\n\n`
+  }
+
+  generateDBFunction(conn: DBConnection): string{
+    let connectionString = `"host=${conn.URL} user=${conn.DBUser} dbname=${conn.DBName} sslmode=disable password=${conn.Password}"`;
+    let f = new GoFunction();
+    f.name = "get database";
+    f.body += `db, err := gorm.Open("postgres", ${connectionString})\n`;
+    f.body += `   if err != nil {fmt.Println("error connecting db", err);panic(err)}\n`;
+    f.body += `   return db`;
+    return f.get();
   }
 
 }

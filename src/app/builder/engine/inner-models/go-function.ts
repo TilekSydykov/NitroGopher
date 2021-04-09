@@ -20,6 +20,6 @@ export class GoFunction {
   }
 
   get(): string{
-    return`func ${this.structName()}(){\n   ${this.body}\n}`
+    return`func ${this.structName()}(){\n   ${this.body}\n}\n\n`
   }
 }
