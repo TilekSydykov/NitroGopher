@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {IHash, StorageService} from '../../services/storage/storage.service';
 import {EndPointReference, Project} from '../../builder/models/Project';
 import {DBConnection} from '../../builder/models/DBConnection';
 import {EndPoint} from '../../builder/models/EndPoint';
 import {IHashPaginator} from '../../util/IHashPaginator';
+import {CodeEngine} from '../../builder/engine/code-engine';
+import {Model} from '../../builder/models/Model';
 
 @Component({
   selector: 'app-projects',
@@ -11,12 +13,18 @@ import {IHashPaginator} from '../../util/IHashPaginator';
   styleUrls: ['./projects.component.css']
 })
 export class ProjectsComponent implements OnInit {
+
+  codeEngine = new CodeEngine();
+
   projects: IHash<Project> = {};
   selectedProject: Project = new Project();
   newProject: Project = new Project();
 
   connections: Array<DBConnection> = [];
   connectionsHash: IHash<DBConnection> = {};
+
+  models: Array<Model> = [];
+  modelsHash: IHash<Model> = {};
 
   endpointsHash: IHash<EndPoint> = {};
   endpoints: Array<EndPoint> = [];
@@ -37,7 +45,7 @@ export class ProjectsComponent implements OnInit {
     this.storageService.projects.subscribe((proj) => {
       this.projects = proj;
       for (let projectsKey in proj) {
-        if(proj.hasOwnProperty(projectsKey)){
+        if (proj.hasOwnProperty(projectsKey)) {
           this.selectProject(proj[projectsKey]);
           break;
         }
@@ -49,22 +57,28 @@ export class ProjectsComponent implements OnInit {
       this.connections = [];
       this.connectionsHash = conn;
       Object.keys(conn).forEach(i => {
-        this.connections.push(conn[i])
+        this.connections.push(conn[i]);
       });
-      console.log(this.connections)
+      console.log(this.connections);
     });
     this.storageService.endpoints.subscribe(conn => {
       this.endpoints = [];
       this.endpointsHash = conn;
       Object.keys(conn).forEach(i => this.endpoints.push(conn[i]));
     });
+    this.storageService.models.subscribe(conn => {
+      this.models = [];
+      this.modelsHash = conn;
+      Object.keys(conn).forEach(i => this.endpoints.push(conn[i]));
+    });
     this.storageService.updateDBConnections();
     this.storageService.updateEndPoints();
     this.storageService.updateProjects();
+
   }
 
-  createProject(){
-    this.newProject.ID = ""+Math.floor(Math.random() * 999_999_999);
+  createProject() {
+    this.newProject.ID = '' + Math.floor(Math.random() * 999_999_999);
     this.storageService.addProject(this.newProject);
     this.newProject = new Project();
   }
@@ -74,16 +88,29 @@ export class ProjectsComponent implements OnInit {
     this.storageService.saveProject(this.selectedProject);
   }
 
-  addEndpoint(){
-    this.selectedProject.endPoints[this.newEndPoint.key]  = this.newEndPoint;
+  addEndpoint() {
+    this.selectedProject.endPoints[this.newEndPoint.key] = this.newEndPoint;
     console.log(this.selectedProject.endPoints);
     this.newEndPoint = new EndPointReference();
     this.saveSelected();
   }
 
-  selectProject(project: Project){
+  selectProject(project: Project) {
     this.selectedProject = this.projects[project.ID];
+    this.generateCode();
     this.endPointPaginator.update(this.selectedProject.endPoints);
     this.endPointPaginator.getPage();
   }
+
+  generateCode() {
+
+    this.selectedProject.code =
+      this.codeEngine.generateProjectCode(this.selectedProject,
+        this.modelsHash,
+        this.endpointsHash,
+        this.connectionsHash);
+    this.selectedProject.codeVersion = this.selectedProject.version;
+    this.storageService.saveProject(this.selectedProject);
+  }
+
 }

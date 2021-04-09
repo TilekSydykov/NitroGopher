@@ -16,6 +16,7 @@ import { ProjectsComponent } from './components/projects/projects.component';
 import { DbConnectionsComponent } from './components/db-connections/db-connections.component';
 import { ModelsComponent } from './components/models/models.component';
 import { EndPointsComponent } from './components/end-points/end-points.component';
+import {NgCodeflaskModule} from 'ng-codeflask';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { EndPointsComponent } from './components/end-points/end-points.component
         ToastrModule.forRoot(),
         BrowserAnimationsModule,
         ReactiveFormsModule,
+        NgCodeflaskModule,
     ],
   providers: [
     {

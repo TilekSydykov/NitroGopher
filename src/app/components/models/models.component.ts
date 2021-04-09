@@ -27,6 +27,7 @@ export class ModelsComponent implements OnInit {
     "manyToOne"
   ];
 
+
   editSelected: boolean = false;
   paginator: IHashPaginator<Model> = new IHashPaginator<Model>();
   constructor(

@@ -5,6 +5,13 @@ export class Project {
   ID: string = "";
   name: string = "";
 
+  version: number = 0;
+
+  port: number = 8080;
+
+  code: string = "";
+  codeVersion: number = -1;
+
   endPoints: IHash<EndPointReference> = {};
   dbConnection: string = "";
 }
