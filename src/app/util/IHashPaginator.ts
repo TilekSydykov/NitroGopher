@@ -1,14 +1,14 @@
 import {IHash} from '../services/storage/storage.service';
 
 export class IHashPaginator<T> {
-  private page: number;
-  private perpage: number;
+  page: number;
+  perpage: number;
 
   currentPageList: Array<T> = new Array<T>();
   pageCount: number = 0;
   private pagedList: Array<T>;
 
-  constructor(hash: IHash<T> = {}, currentPage = 1, perPage = 20) {
+  constructor(hash: IHash<T> = {}, currentPage = 1, perPage = 5) {
     this.pagedList = [];
     Object.keys(hash).forEach(i => {
       this.pagedList.push(hash[i])
@@ -33,17 +33,22 @@ export class IHashPaginator<T> {
 
   getPage(n: number = 0): Array<T>{
     let last = false;
-    if(n < 1){
+    if(n < 0 || this.page < 0){
+      this.page = 1;
+      n = this.page;
+    }
+    if(n == 0){
       n = this.page;
     }
     if(n >= this.getPagesCount()){
-      n = this.getPagesCount();
+      n = this.pageCount;
       last = true;
+      this.page = this.pageCount;
     }
     if (last){
       this.currentPageList = this.pagedList.slice(((n - 1) * this.perpage), this.pagedList.length  )
     } else {
-      this.currentPageList = this.pagedList.slice(((n - 1) * this.perpage), n * this.perpage )
+      this.currentPageList = this.pagedList.slice(((n - 1) * this.perpage), n * this.perpage)
     }
 
     return this.currentPageList;
@@ -55,6 +60,9 @@ export class IHashPaginator<T> {
   }
 
   prev(): Array<T>{
+    if(this.page == 1){
+      return this.getPage();
+    }
     this.page--;
     return this.getPage();
   }

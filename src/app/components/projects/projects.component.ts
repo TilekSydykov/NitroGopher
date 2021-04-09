@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {IHash, StorageService} from '../../services/storage/storage.service';
-import {Project} from '../../builder/models/Project';
+import {EndPointReference, Project} from '../../builder/models/Project';
 import {DBConnection} from '../../builder/models/DBConnection';
-import {Model} from '../../builder/models/Model';
 import {EndPoint} from '../../builder/models/EndPoint';
 import {IHashPaginator} from '../../util/IHashPaginator';
 
@@ -18,7 +17,11 @@ export class ProjectsComponent implements OnInit {
 
   connections: Array<DBConnection> = [];
   connectionsHash: IHash<DBConnection> = {};
+
+  endpointsHash: IHash<EndPoint> = {};
   endpoints: Array<EndPoint> = [];
+  newEndPoint: EndPointReference = new EndPointReference();
+  endPointPaginator = new IHashPaginator<EndPointReference>();
 
   editSelected: boolean = false;
 
@@ -35,7 +38,7 @@ export class ProjectsComponent implements OnInit {
       this.projects = proj;
       for (let projectsKey in proj) {
         if(proj.hasOwnProperty(projectsKey)){
-          this.selectedProject = proj[projectsKey];
+          this.selectProject(proj[projectsKey]);
           break;
         }
       }
@@ -52,6 +55,7 @@ export class ProjectsComponent implements OnInit {
     });
     this.storageService.endpoints.subscribe(conn => {
       this.endpoints = [];
+      this.endpointsHash = conn;
       Object.keys(conn).forEach(i => this.endpoints.push(conn[i]));
     });
     this.storageService.updateDBConnections();
@@ -70,4 +74,16 @@ export class ProjectsComponent implements OnInit {
     this.storageService.saveProject(this.selectedProject);
   }
 
+  addEndpoint(){
+    this.selectedProject.endPoints[this.newEndPoint.key]  = this.newEndPoint;
+    console.log(this.selectedProject.endPoints);
+    this.newEndPoint = new EndPointReference();
+    this.saveSelected();
+  }
+
+  selectProject(project: Project){
+    this.selectedProject = this.projects[project.ID];
+    this.endPointPaginator.update(this.selectedProject.endPoints);
+    this.endPointPaginator.getPage();
+  }
 }

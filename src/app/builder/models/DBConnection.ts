@@ -7,4 +7,5 @@ export class DBConnection {
   DBUser: string = "";
   Password: string = "";
   DBName: string = "";
+
 }
