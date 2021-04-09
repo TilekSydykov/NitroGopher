@@ -25,7 +25,7 @@
           <br>
           Total pages: {{ paginator.pageCount }}
         </li>
-        <li *ngIf="paginator.currentPageList.length < 1">
+        <li *ngIf="paginator.currentPageList.length < 1" class="list-group-item">
             <i class="text-secondary">No items</i>
         </li>
         <li *ngFor="let project of paginator.currentPageList" style="cursor: pointer" class="list-group-item">
@@ -44,25 +44,34 @@
       </ul>
     </div>
     <div class="col-md-9">
+      <div class="row">
+          <div class="col">
+            <h2 class="text-center">
+              {{ selectedProject.name }}
+            </h2>
+          </div>
+      </div>
+      <br>
       <div class="card">
-        <div class="card-header ui-sortable-handle">
-          <span *ngIf="editSelected">
+        <div class="card-header">
+          <i class="fa fa-edit" (click)="editSelected = true"></i>
+        </div>
+        <div class="card-body">
+
+          <div *ngIf="editSelected">
             <div class="row">
               <div class="col">
-                <input type="text" class="form-control" [(ngModel)]="selectedProject.name">
+                <label for="name">Name on the project</label>
+              </div>
+              <div class="col">
+                <input type="text" id="name" class="form-control" [(ngModel)]="selectedProject.name">
               </div>
               <div class="col">
                 <button class="btn btn-success" (click)="saveSelected()">Ok</button>
               </div>
             </div>
-          </span>
-          <h3 *ngIf="!editSelected" class="card-title">
-            {{ selectedProject.name }}
-            &nbsp;
-            <i class="fa fa-edit" (click)="editSelected = true"></i>
-          </h3>
-        </div>
-        <div class="card-body">
+            <hr>
+          </div>
           <div class="row">
             <div class="col">
               <b>Db connection</b>
@@ -78,6 +87,23 @@
               </div>
               <div *ngIf="!editSelected && selectedProject.dbConnection !== ''">
                 {{ connectionsHash[selectedProject.dbConnection].name }}
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col">
+              <b>Port</b>
+            </div>
+            <div class="col">
+              <div *ngIf="selectedProject.port == 0 ">
+                <span class="text-secondary">No port &nbsp; <i class="click fa fa-plus" (click)="editSelected = true"></i></span>
+              </div>
+              <div *ngIf="editSelected">
+                <input [(ngModel)]="selectedProject.port" type="number" placeholder="Port" class="form-control" min="1000" max="65534">
+              </div>
+              <div *ngIf="!editSelected && selectedProject.port !== 0">
+                {{ selectedProject.port }}
               </div>
             </div>
           </div>
@@ -115,7 +141,14 @@
           </table>
         </div>
       </div>
-
+      <div class="card h-400">
+          <ng-codeflask [language]="'golang'" [(code)]="selectedProject.code" [contentEditable]="'false'"></ng-codeflask>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <i>// TODO: code saving and manipulation</i>
+        </div>
+      </div>
     </div>
   </div>
 </div>
