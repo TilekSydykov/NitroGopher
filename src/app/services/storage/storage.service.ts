@@ -1,10 +1,10 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {User} from "../../models/user";
-import {Project} from '../../builder/models/Project';
+import {Project} from '../../builder/models/project';
 import {Observable} from 'rxjs';
-import {EndPoint} from '../../builder/models/EndPoint';
-import {Model} from '../../builder/models/Model';
-import {DBConnection} from '../../builder/models/DBConnection';
+import {EndPoint} from '../../builder/models/end-point';
+import {Model} from '../../builder/models/model';
+import {DbConnection} from '../../builder/models/db-connection';
 
 export interface IHash<T> {
   [details: string] : T;
@@ -115,20 +115,20 @@ export class StorageService {
     this.endpoints.emit(this._endpoints);
   }
 
-  // DBConnection
+  // DbConnection
 
-  _dbConnection: IHash<DBConnection> = {};
-  dbConnection: EventEmitter<IHash<DBConnection>> = new EventEmitter<IHash<DBConnection>>();
+  _dbConnection: IHash<DbConnection> = {};
+  dbConnection: EventEmitter<IHash<DbConnection>> = new EventEmitter<IHash<DbConnection>>();
 
 
-  addDBConnection(p: DBConnection){
+  addDBConnection(p: DbConnection){
     this._dbConnection[p.ID] = (p);
     this.saveDBConnections();
     this.updateDBConnections();
   }
 
 
-  saveDBConnection(connection: DBConnection) {
+  saveDBConnection(connection: DbConnection) {
     this._dbConnection[connection.ID] = connection;
     this.saveDBConnections();
     this.updateDBConnections();

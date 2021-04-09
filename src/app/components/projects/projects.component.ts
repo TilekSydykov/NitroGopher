@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {IHash, StorageService} from '../../services/storage/storage.service';
-import {EndPointReference, Project} from '../../builder/models/Project';
-import {DBConnection} from '../../builder/models/DBConnection';
-import {EndPoint} from '../../builder/models/EndPoint';
+import {EndPointReference, Project} from '../../builder/models/project';
+import {DbConnection} from '../../builder/models/db-connection';
+import {EndPoint} from '../../builder/models/end-point';
 import {IHashPaginator} from '../../util/IHashPaginator';
 import {CodeEngine} from '../../builder/engine/code-engine';
-import {Model} from '../../builder/models/Model';
+import {Model} from '../../builder/models/model';
 
 @Component({
   selector: 'app-projects',
@@ -20,8 +20,8 @@ export class ProjectsComponent implements OnInit {
   selectedProject: Project = new Project();
   newProject: Project = new Project();
 
-  connections: Array<DBConnection> = [];
-  connectionsHash: IHash<DBConnection> = {};
+  connections: Array<DbConnection> = [];
+  connectionsHash: IHash<DbConnection> = {};
 
   models: Array<Model> = [];
   modelsHash: IHash<Model> = {};

@@ -1,4 +1,4 @@
-import {DBConnection} from './DBConnection';
+import {DbConnection} from './db-connection';
 import {IHash} from '../../services/storage/storage.service';
 
 export class Project {

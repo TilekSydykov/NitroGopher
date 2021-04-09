@@ -17,10 +17,28 @@
 <div class="container">
   <div class="row">
     <div class="col-md-3">
-      <ul class="list-unstyled">
-        <li *ngFor="let model of paginator.currentPageList" style="cursor: pointer">
-          <hr>
-          <i (click)="selectedModel = model">{{ model.name }}</i>
+      <ul class="list-unstyled list-group">
+        <li  class="list-group-item text-center bg-gradient-gray-dark">
+          <button class="btn btn-sm btn-light" (click)="paginator.prev()"><</button>&nbsp;
+          <button class="btn btn-sm btn-light">{{ paginator.page }} </button>&nbsp;
+          <button class="btn btn-sm btn-light" (click)="paginator.next()">></button>
+
+        </li>
+        <li *ngIf="paginator.currentPageList.length < 1" class="list-group-item">
+          <i class="text-secondary">No items</i>
+        </li>
+        <li (click)="selectedModel = model" *ngFor="let model of paginator.currentPageList" style="cursor: pointer" class="list-group-item">
+          <i > &nbsp;{{ model.name }}</i>
+        </li>
+        <li class="list-group-item bg-gradient-gray-dark">
+          <div class="row">
+            <div class="col-md-7">
+              <input type="text" name="name" placeholder="New item" class="form-control" [(ngModel)]="newModel.name">
+            </div>
+            <div class="col-md-5">
+              <button class="btn btn-light float-right" (click)="create()">Create</button>
+            </div>
+          </div>
         </li>
       </ul>
     </div>
@@ -70,20 +88,24 @@
                 <input type="text" [(ngModel)]="newField.name" class="form-control" placeholder="name">
               </th>
               <td>
-                <select class="form-control" [(ngModel)]="newField.type"  >
-                  <option [ngValue]="end" *ngFor="let end of types; let i = index" selected>
-                    {{ end.name }}
-                  </option>
-                  <hr>
-                  <option [ngValue]="end" *ngFor="let end of customTypes; let i = index">
-                    {{ end.name }}
-                  </option>
-                </select>
+                <label>
+                  <select class="form-control" [(ngModel)]="newField.type"  >
+                    <option [ngValue]="end" *ngFor="let end of types; let i = index" selected>
+                      {{ end.name }}
+                    </option>
+                    <hr>
+                    <option [ngValue]="end" *ngFor="let end of customTypes; let i = index">
+                      {{ end.name }}
+                    </option>
+                  </select>
+                </label>
               </td>
               <td>
-                <select *ngIf="newField.type.isCustom" class="form-control"  [(ngModel)]="newField.relationType" >
-                  <option value="{{ end }}" *ngFor="let end of relations;" selected>{{ end }}</option>
-                </select>
+                <label>
+                  <select *ngIf="newField.type.isCustom" class="form-control"  [(ngModel)]="newField.relationType" >
+                    <option value="{{ end }}" *ngFor="let end of relations;" selected>{{ end }}</option>
+                  </select>
+                </label>
               </td>
               <td>
                 <button class="btn btn-success" (click)="addField()">Add</button>
@@ -91,23 +113,6 @@
             </tr>
             </tbody>
           </table>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header ui-sortable-handle">
-          <h3 class="card-title">
-            Create model
-          </h3>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-6">
-              <input type="text" name="name" placeholder="Name" class="form-control" [(ngModel)]="newModel.name">
-            </div>
-            <div class="col-md-6">
-              <button class="btn btn-danger" (click)="createEndPoint()">Create</button>
-            </div>
-          </div>
         </div>
       </div>
     </div>

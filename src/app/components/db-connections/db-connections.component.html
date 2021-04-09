@@ -17,10 +17,31 @@
 <div class="container">
   <div class="row">
     <div class="col-md-3">
-      <ul class="list-unstyled">
-        <li *ngFor="let endpoint of paginator.currentPageList" style="cursor: pointer">
-          <hr>
-          <i (click)="selectedDbConn = endpoint">{{ endpoint.name }}</i>
+      <ul class="list-unstyled list-group">
+        <li  class="list-group-item text-center bg-gradient-gray-dark">
+          <button class="btn btn-sm btn-light" (click)="paginator.prev()"><</button>&nbsp;
+          <button class="btn btn-sm btn-light">{{ paginator.page }} </button>&nbsp;
+          <button class="btn btn-sm btn-light" (click)="paginator.next()">></button>
+
+        </li>
+        <li *ngIf="paginator.currentPageList.length < 1" class="list-group-item">
+          <i class="text-secondary">No items</i>
+        </li>
+        <li (click)="selectedDbConn = conn"
+            *ngFor="let conn of paginator.currentPageList"
+            [ngClass]="conn.ID === selectedDbConn.ID ? 'bg-gradient-light text-bold' : ''"
+            style="cursor: pointer" class="list-group-item" >
+          <i> &nbsp;{{ conn.name }}</i>
+        </li>
+        <li class="list-group-item bg-gradient-gray-dark">
+          <div class="row">
+            <div class="col-md-7">
+              <input type="text" name="name" placeholder="New item" class="form-control" [(ngModel)]="newConn.name">
+            </div>
+            <div class="col-md-5">
+              <button class="btn btn-light float-right" (click)="createConnection()">Create</button>
+            </div>
+          </div>
         </li>
       </ul>
     </div>
@@ -74,23 +95,7 @@
           </div>
         </div>
       </div>
-      <div class="card">
-        <div class="card-header ui-sortable-handle">
-          <h3 class="card-title">
-            Create point
-          </h3>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-6">
-              <input type="text" name="name" placeholder="Name" class="form-control" [(ngModel)]="newConn.name">
-            </div>
-            <div class="col-md-6">
-              <button class="btn btn-danger" (click)="createConnection()">Create</button>
-            </div>
-          </div>
-        </div>
-      </div>
+
     </div>
   </div>
 </div>
