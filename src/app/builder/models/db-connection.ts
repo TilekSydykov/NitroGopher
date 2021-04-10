@@ -1,4 +1,4 @@
-export class DBConnection {
+export class DbConnection {
   ID: string = "";
 
   name: string = "";

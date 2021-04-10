@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {IHash, StorageService} from '../../services/storage/storage.service';
-import {Field, FieldType, initialTypes, Model} from '../../builder/models/Model';
+import {Field, FieldType, initialTypes, Model} from '../../builder/models/model';
 import {IHashPaginator} from '../../util/IHashPaginator';
 import {ToastrService} from 'ngx-toastr';
 
@@ -55,7 +55,7 @@ export class ModelsComponent implements OnInit {
     this.storageService.updateModels();
   }
 
-  createEndPoint(){
+  create(){
     this.newModel.ID = ""+Math.floor(Math.random() * 999_999_999);
     this.storageService.addModel(this.newModel);
     this.newModel = new Model();
@@ -99,6 +99,10 @@ export class ModelsComponent implements OnInit {
       f.isCustom = true;
       this.customTypes.push(f);
     })
+  }
+
+  select(m: Model){
+    this.selectedModel = m
   }
 
 }

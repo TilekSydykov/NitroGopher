@@ -1,8 +1,8 @@
-import {Project} from '../models/Project';
-import {Model} from '../models/Model';
+import {Project} from '../models/project';
+import {Model} from '../models/model';
 import {IHash} from '../../services/storage/storage.service';
-import {DBConnection} from '../models/DBConnection';
-import {EndPoint} from '../models/EndPoint';
+import {DbConnection} from '../models/db-connection';
+import {EndPoint} from '../models/end-point';
 import {GoFunction} from './inner-models/go-function';
 
 export class CodeEngine {
@@ -10,7 +10,7 @@ export class CodeEngine {
     p: Project,
     ms: IHash<Model>,
     es: IHash<EndPoint>,
-    dbs: IHash<DBConnection>): string {
+    dbs: IHash<DbConnection>): string {
 
     p.codeVersion = p.version;
     let code = this.generateFirstPage();
@@ -37,7 +37,7 @@ export class CodeEngine {
     return `import (\n"net/http"\n)\n\n`
   }
 
-  generateDBFunction(conn: DBConnection): string{
+  generateDBFunction(conn: DbConnection): string{
     let connectionString = `"host=${conn.URL} user=${conn.DBUser} dbname=${conn.DBName} sslmode=disable password=${conn.Password}"`;
     let f = new GoFunction();
     f.name = "get database";

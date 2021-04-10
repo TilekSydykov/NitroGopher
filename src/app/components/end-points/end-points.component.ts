@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {Project} from '../../builder/models/Project';
+import {Project} from '../../builder/models/project';
 import {IHash, StorageService} from '../../services/storage/storage.service';
-import {EndPoint} from '../../builder/models/EndPoint';
+import {EndPoint} from '../../builder/models/end-point';
 import {IHashPaginator} from '../../util/IHashPaginator';
-import {Model} from '../../builder/models/Model';
+import {Model} from '../../builder/models/model';
 
 @Component({
   selector: 'app-end-points',
@@ -48,6 +48,12 @@ export class EndPointsComponent implements OnInit {
   saveSelected() {
     this.editSelected = false;
     this.storageService.saveEndPoint(this.selectedEndPoint);
+  }
+
+
+  selectEndp(e: EndPoint){
+    this.selectedEndPoint = this.endpoints[e.ID];
+    this.paginator.getPage()
   }
 
 }

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {EndPoint} from '../../builder/models/EndPoint';
+import {EndPoint} from '../../builder/models/end-point';
 import {IHash, StorageService} from '../../services/storage/storage.service';
-import {DBConnection} from '../../builder/models/DBConnection';
+import {DbConnection} from '../../builder/models/db-connection';
 import {IHashPaginator} from '../../util/IHashPaginator';
-import {Model} from '../../builder/models/Model';
+import {Model} from '../../builder/models/model';
 
 @Component({
   selector: 'app-db-connections',
@@ -12,12 +12,12 @@ import {Model} from '../../builder/models/Model';
 })
 export class DbConnectionsComponent implements OnInit {
 
-  dbConnection: IHash<DBConnection> = {};
-  selectedDbConn: DBConnection = new DBConnection();
-  newConn: DBConnection = new DBConnection();
+  dbConnection: IHash<DbConnection> = {};
+  selectedDbConn: DbConnection = new DbConnection();
+  newConn: DbConnection = new DbConnection();
 
   editSelected: boolean = false;
-  paginator: IHashPaginator<DBConnection> = new IHashPaginator<DBConnection>();
+  paginator: IHashPaginator<DbConnection> = new IHashPaginator<DbConnection>();
 
   constructor(
     private storageService: StorageService
@@ -43,7 +43,7 @@ export class DbConnectionsComponent implements OnInit {
   createConnection(){
     this.newConn.ID = ""+Math.floor(Math.random() * 999_999_999);
     this.storageService.addDBConnection(this.newConn);
-    this.newConn = new DBConnection();
+    this.newConn = new DbConnection();
   }
 
   saveSelected() {

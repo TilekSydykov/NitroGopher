@@ -19,17 +19,19 @@
     <div class="col-md-3">
       <ul class="list-unstyled list-group">
         <li  class="list-group-item text-center bg-gradient-gray-dark">
-          <button class="btn btn-light" (click)="paginator.prev()"><</button>&nbsp;
-          <button class="btn btn-light">{{ paginator.page }} </button>&nbsp;
-          <button class="btn btn-light" (click)="paginator.next()">></button>
-          <br>
-          Total pages: {{ paginator.pageCount }}
+          <button class="btn btn-sm btn-light" (click)="paginator.prev()"><</button>&nbsp;
+          <button class="btn btn-sm btn-light">{{ paginator.page }} </button>&nbsp;
+          <button class="btn btn-sm btn-light" (click)="paginator.next()">></button>
+
         </li>
         <li *ngIf="paginator.currentPageList.length < 1" class="list-group-item">
             <i class="text-secondary">No items</i>
         </li>
-        <li *ngFor="let project of paginator.currentPageList" style="cursor: pointer" class="list-group-item">
-          <i (click)="selectProject(project)"> &nbsp;{{ project.name }}</i>
+        <li (click)="selectProject(project)"
+            *ngFor="let project of paginator.currentPageList"
+            [ngClass]="project.ID === selectedProject.ID ? 'bg-gradient-light text-bold' : ''"
+            style="cursor: pointer" class="list-group-item">
+          <i> &nbsp;{{ project.name }}</i>
         </li>
         <li class="list-group-item bg-gradient-gray-dark">
           <div class="row">
@@ -81,9 +83,11 @@
                 <span class="text-secondary">No connection &nbsp; <i class="click fa fa-plus" (click)="editSelected = true"></i></span>
               </div>
               <div *ngIf="editSelected">
+                <label>
                   <select [(ngModel)]="selectedProject.dbConnection" class="form-control">
                     <option value="{{ conn.ID }}" *ngFor="let conn of connections">{{ conn.name }}</option>
                   </select>
+                </label>
               </div>
               <div *ngIf="!editSelected && selectedProject.dbConnection !== ''">
                 {{ connectionsHash[selectedProject.dbConnection].name }}
