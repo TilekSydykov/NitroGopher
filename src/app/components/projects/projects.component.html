@@ -83,11 +83,9 @@
                 <span class="text-secondary">No connection &nbsp; <i class="click fa fa-plus" (click)="editSelected = true"></i></span>
               </div>
               <div *ngIf="editSelected">
-                <label>
                   <select [(ngModel)]="selectedProject.dbConnection" class="form-control">
                     <option value="{{ conn.ID }}" *ngFor="let conn of connections">{{ conn.name }}</option>
                   </select>
-                </label>
               </div>
               <div *ngIf="!editSelected && selectedProject.dbConnection !== ''">
                 {{ connectionsHash[selectedProject.dbConnection].name }}

@@ -12,9 +12,12 @@ import {Model} from '../../builder/models/model';
   templateUrl: './projects.component.html',
   styleUrls: ['./projects.component.css']
 })
+
 export class ProjectsComponent implements OnInit {
 
   codeEngine = new CodeEngine();
+
+  selectedTab = 0;
 
   projects: IHash<Project> = {};
   selectedProject: Project = new Project();
@@ -112,5 +115,4 @@ export class ProjectsComponent implements OnInit {
     this.selectedProject.codeVersion = this.selectedProject.version;
     this.storageService.saveProject(this.selectedProject);
   }
-
 }
