@@ -23,7 +23,6 @@ export class Message {
 export class SocketService {
   url = "ws://localhost:8080/socket/";
   // url = "ws://"+ window.location.host +"/socket/";
-
   ws: WebSocket | undefined;
 
   constructor(storageService: StorageService) {

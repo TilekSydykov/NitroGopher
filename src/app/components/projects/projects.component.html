@@ -51,29 +51,25 @@
             <h2 class="text-center">
               {{ selectedProject.name }}
             </h2>
+            <ul class="list-inline nav d-flex">
+              <li class="nav-item active">
+                <button (click)="selectedTab = 0" class="btn" [ngClass]="selectedTab == 0?'btn-dark':''">Main</button>
+              </li>
+              <li class="nav-item active">
+                <button (click)="selectedTab = 1" [ngClass]="selectedTab == 1?'btn-dark':''" class="btn">Code</button>
+              </li>
+              <li class="nav-item active">
+                <button (click)="selectedTab = 2" [ngClass]="selectedTab == 2?'btn-dark':''" class="btn">Run</button>
+              </li>
+              <li class="nav-item active">
+                <button (click)="selectedTab = 3" [ngClass]="selectedTab == 3?'btn-dark':''" class="btn">Settings</button>
+              </li>
+            </ul>
           </div>
       </div>
       <br>
-      <div class="card">
-        <div class="card-header">
-          <i class="fa fa-edit" (click)="editSelected = true"></i>
-        </div>
+      <div *ngIf="selectedTab == 0" class="card">
         <div class="card-body">
-
-          <div *ngIf="editSelected">
-            <div class="row">
-              <div class="col">
-                <label for="name">Name on the project</label>
-              </div>
-              <div class="col">
-                <input type="text" id="name" class="form-control" [(ngModel)]="selectedProject.name">
-              </div>
-              <div class="col">
-                <button class="btn btn-success" (click)="saveSelected()">Ok</button>
-              </div>
-            </div>
-            <hr>
-          </div>
           <div class="row">
             <div class="col">
               <b>Db connection</b>
@@ -82,12 +78,7 @@
               <div *ngIf="selectedProject.dbConnection == '' ">
                 <span class="text-secondary">No connection &nbsp; <i class="click fa fa-plus" (click)="editSelected = true"></i></span>
               </div>
-              <div *ngIf="editSelected">
-                  <select [(ngModel)]="selectedProject.dbConnection" class="form-control">
-                    <option value="{{ conn.ID }}" *ngFor="let conn of connections">{{ conn.name }}</option>
-                  </select>
-              </div>
-              <div *ngIf="!editSelected && selectedProject.dbConnection !== ''">
+              <div *ngIf="selectedProject.dbConnection !== ''">
                 {{ connectionsHash[selectedProject.dbConnection].name }}
               </div>
             </div>
@@ -101,17 +92,12 @@
               <div *ngIf="selectedProject.port == 0 ">
                 <span class="text-secondary">No port &nbsp; <i class="click fa fa-plus" (click)="editSelected = true"></i></span>
               </div>
-              <div *ngIf="editSelected">
-                <input [(ngModel)]="selectedProject.port" type="number" placeholder="Port" class="form-control" min="1000" max="65534">
-              </div>
-              <div *ngIf="!editSelected && selectedProject.port !== 0">
+              <div *ngIf="selectedProject.port !== 0">
                 {{ selectedProject.port }}
               </div>
             </div>
           </div>
           <hr>
-          <b>End Points</b>
-
           <table class="table">
             <thead>
             <tr>
@@ -143,12 +129,47 @@
           </table>
         </div>
       </div>
-      <div class="card h-400">
+      <div *ngIf="selectedTab == 1" class="card h-400">
           <ng-codeflask [language]="'golang'" [(code)]="selectedProject.code" [contentEditable]="'false'"></ng-codeflask>
       </div>
-      <div class="card">
+      <div *ngIf="selectedTab == 2" class="card">
         <div class="card-body">
           <i>// TODO: code saving and manipulation</i>
+        </div>
+      </div>
+
+      <div *ngIf="selectedTab == 3" class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col">
+              <b>Name on the project</b>
+            </div>
+            <div class="col">
+              <input type="text" id="name" class="form-control" [(ngModel)]="selectedProject.name">
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col">
+              <b>Port</b>
+            </div>
+            <div class="col">
+              <input [(ngModel)]="selectedProject.port" type="number" placeholder="Port" class="form-control" min="1000" max="65534">
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col">
+              <b>Database</b>
+            </div>
+            <div class="col">
+              <select [(ngModel)]="selectedProject.dbConnection" class="form-control">
+                <option value="{{ conn.ID }}" *ngFor="let conn of connections">{{ conn.name }}</option>
+              </select>
+            </div>
+          </div>
+          <hr>
+          <button class="btn btn-success" (click)="saveSelected()">Save</button>
         </div>
       </div>
     </div>
