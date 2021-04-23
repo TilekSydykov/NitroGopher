@@ -4,6 +4,7 @@ import {IHash} from '../../services/storage/storage.service';
 import {DbConnection} from '../models/db-connection';
 import {EndPoint} from '../models/end-point';
 import {GoFunction} from './inner-models/go-function';
+import {Variable} from './inner-models/variable';
 
 export class CodeEngine {
   generateProjectCode(
@@ -34,7 +35,7 @@ export class CodeEngine {
   }
 
   generateImports(){
-    return `import (\n"net/http"\n)\n\n`
+    return `import (\n"net/http"\n"github.com/jinzhu/gorm"\n"fmt"\n)\n\n`
   }
 
   generateDBFunction(conn: DbConnection): string{
@@ -44,6 +45,7 @@ export class CodeEngine {
     f.body += `db, err := gorm.Open("postgres", ${connectionString})\n`;
     f.body += `   if err != nil {fmt.Println("error connecting db", err);panic(err)}\n`;
     f.body += `   return db`;
+    f.returnTypes.push(new Variable("", "*gorm.DB"));
     return f.get();
   }
 

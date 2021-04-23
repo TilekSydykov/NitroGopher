@@ -8,7 +8,7 @@ export class IHashPaginator<T> {
   pageCount: number = 0;
   private pagedList: Array<T>;
 
-  constructor(hash: IHash<T> = {}, currentPage = 1, perPage = 5) {
+  constructor(hash: IHash<T> = {}, currentPage = 1, perPage = 10) {
     this.pagedList = [];
     Object.keys(hash).forEach(i => {
       this.pagedList.push(hash[i])
@@ -23,7 +23,6 @@ export class IHashPaginator<T> {
       this.pagedList.push(hash[i])
     });
     this.getPagesCount();
-
   }
 
   getPagesCount(): number{

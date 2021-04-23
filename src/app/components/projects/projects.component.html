@@ -45,8 +45,8 @@
         </li>
       </ul>
     </div>
-    <div class="col-md-9">
-      <div class="row">
+    <div class="col-md-9" *ngIf="selectedProject.ID != ''">
+      <div class="row" >
           <div class="col">
             <h2 class="text-center">
               {{ selectedProject.name }}
@@ -140,38 +140,67 @@
 
       <div *ngIf="selectedTab == 3" class="card">
         <div class="card-body">
-          <div class="row">
-            <div class="col">
-              <b>Name on the project</b>
-            </div>
-            <div class="col">
-              <input type="text" id="name" class="form-control" [(ngModel)]="selectedProject.name">
-            </div>
-          </div>
-          <hr>
-          <div class="row">
-            <div class="col">
-              <b>Port</b>
-            </div>
-            <div class="col">
-              <input [(ngModel)]="selectedProject.port" type="number" placeholder="Port" class="form-control" min="1000" max="65534">
-            </div>
-          </div>
-          <hr>
-          <div class="row">
-            <div class="col">
-              <b>Database</b>
-            </div>
-            <div class="col">
-              <select [(ngModel)]="selectedProject.dbConnection" class="form-control">
+          <table class="w-100 table">
+            <tbody>
+            <tr>
+              <h3>General</h3>
+            </tr>
+            <tr>
+              <th><b>Name on the project</b></th>
+              <th><input type="text" id="name" class="form-control" [(ngModel)]="selectedProject.name"></th>
+            </tr>
+            <tr>
+              <th><b>Port</b></th>
+              <th><input [(ngModel)]="selectedProject.port" type="number" placeholder="Port" class="form-control" min="1000" max="65534"></th>
+            </tr>
+            <tr>
+              <th><b>Database</b></th>
+              <th><select [(ngModel)]="selectedProject.dbConnection" class="form-control">
                 <option value="{{ conn.ID }}" *ngFor="let conn of connections">{{ conn.name }}</option>
-              </select>
-            </div>
-          </div>
-          <hr>
-          <button class="btn btn-success" (click)="saveSelected()">Save</button>
+              </select></th>
+            </tr>
+            <tr>
+              <h3>Security</h3>
+            </tr>
+            <tr>
+              <th><b>SignIn enabled</b></th>
+              <th><input type="checkbox" [(ngModel)]="selectedProject.security.signInEnabled"></th>
+            </tr>
+            <tr>
+              <th>
+                <b>SignIn Model</b> <br><small>Should contain <b>username</b> and <b>password</b> <br>fields otherwise they will created automatically</small>
+              </th>
+              <th>
+                <select [(ngModel)]="selectedProject.security.signInModel" class="form-control">
+                  <option value="{{ model.ID }}" *ngFor="let model of models">{{ model.name }}</option>
+                </select>
+              </th>
+            </tr>
+            <tr>
+              <th><b>SignUp enabled</b></th>
+              <th><input type="checkbox" [(ngModel)]="selectedProject.security.signUpEnabled"></th>
+            </tr>
+            <tr>
+             <th>
+               <button class="btn btn-success" (click)="saveSelected()">Save settings</button>
+             </th>
+            </tr>
+            <tr>
+              <th>
+                <h3 class="text-danger">Danger Zone</h3>
+              </th>
+            </tr>
+            <tr class="bg-gradient-dark">
+              <th>Delete project</th>
+              <th><button class="btn btn-danger" (click)="deleteSelected()">Delete</button></th>
+            </tr>
+            </tbody>
+          </table>
         </div>
       </div>
+    </div>
+    <div class="col-md-9 text-center" *ngIf="selectedProject.ID == ''">
+      <i class="text-secondary">select project</i>
     </div>
   </div>
 </div>

@@ -36,6 +36,7 @@ export class DbConnectionsComponent implements OnInit {
       }
       this.paginator.update(endp);
       this.paginator.getPage();
+
     });
     this.storageService.updateDBConnections();
   }

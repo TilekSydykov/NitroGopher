@@ -1,6 +1,10 @@
+import {Variable} from './variable';
+
 export class GoFunction {
   name: string = "";
   body: string = "";
+  returnTypes: Array<Variable> = [];
+  inputTypes: Array<Variable> = [];
 
   structName(): string{
     let n = this.name.split(/[^A-Za-z]/);
@@ -20,6 +24,26 @@ export class GoFunction {
   }
 
   get(): string{
-    return`func ${this.structName()}(){\n   ${this.body}\n}\n\n`
+    let r = this.generateReturn("");
+    let input = this.generateInputs("");
+    return`func ${this.structName()}(${input})${r}{\n   ${this.body}\n}\n\n`
+  }
+
+  generateInputs(i: string): string{
+    return i
+  }
+  
+  generateReturn(r: string): string{
+    if(this.returnTypes.length > 0){
+      r += "(";
+      for (let i = 0; i < this.returnTypes.length; i++) {
+        r+= this.returnTypes[i].type;
+        if(i != this.returnTypes.length - 1){
+          r += ","
+        }
+      }
+      r += ")";
+    }
+    return r;
   }
 }

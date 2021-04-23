@@ -1,5 +1,5 @@
-import {DbConnection} from './db-connection';
 import {IHash} from '../../services/storage/storage.service';
+import {Security} from './security';
 
 export class Project {
   ID: string = "";
@@ -11,6 +11,8 @@ export class Project {
 
   code: string = "";
   codeVersion: number = -1;
+
+  security: Security = new Security();
 
   endPoints: IHash<EndPointReference> = {};
   dbConnection: string = "";

@@ -6,6 +6,7 @@ import {EndPoint} from '../../builder/models/end-point';
 import {IHashPaginator} from '../../util/IHashPaginator';
 import {CodeEngine} from '../../builder/engine/code-engine';
 import {Model} from '../../builder/models/model';
+import {Param} from '../../util/Functions';
 
 @Component({
   selector: 'app-projects',
@@ -47,14 +48,10 @@ export class ProjectsComponent implements OnInit {
   ngOnInit(): void {
     this.storageService.projects.subscribe((proj) => {
       this.projects = proj;
-      for (let projectsKey in proj) {
-        if (proj.hasOwnProperty(projectsKey)) {
-          this.selectProject(proj[projectsKey]);
-          break;
-        }
-      }
+
       this.paginator.update(proj);
       this.paginator.getPage();
+      console.log("updates");
     });
     this.storageService.dbConnection.subscribe(conn => {
       this.connections = [];
@@ -62,7 +59,6 @@ export class ProjectsComponent implements OnInit {
       Object.keys(conn).forEach(i => {
         this.connections.push(conn[i]);
       });
-      console.log(this.connections);
     });
     this.storageService.endpoints.subscribe(conn => {
       this.endpoints = [];
@@ -72,12 +68,13 @@ export class ProjectsComponent implements OnInit {
     this.storageService.models.subscribe(conn => {
       this.models = [];
       this.modelsHash = conn;
-      Object.keys(conn).forEach(i => this.endpoints.push(conn[i]));
+      Object.keys(conn).forEach(i => this.models.push(conn[i]));
+      console.log("models update");
     });
     this.storageService.updateDBConnections();
     this.storageService.updateEndPoints();
     this.storageService.updateProjects();
-
+    this.storageService.updateModels();
   }
 
   createProject() {
@@ -93,7 +90,6 @@ export class ProjectsComponent implements OnInit {
 
   addEndpoint() {
     this.selectedProject.endPoints[this.newEndPoint.key] = this.newEndPoint;
-    console.log(this.selectedProject.endPoints);
     this.newEndPoint = new EndPointReference();
     this.saveSelected();
   }
@@ -106,7 +102,6 @@ export class ProjectsComponent implements OnInit {
   }
 
   generateCode() {
-
     this.selectedProject.code =
       this.codeEngine.generateProjectCode(this.selectedProject,
         this.modelsHash,
@@ -114,5 +109,14 @@ export class ProjectsComponent implements OnInit {
         this.connectionsHash);
     this.selectedProject.codeVersion = this.selectedProject.version;
     this.storageService.saveProject(this.selectedProject);
+  }
+
+  deleteSelected(){
+    let ok = confirm("You want to delete this project?");
+    console.log(ok);
+    if (ok){
+      this.storageService.deleteProject(this.selectedProject);
+      this.selectedProject = new Project()
+    }
   }
 }

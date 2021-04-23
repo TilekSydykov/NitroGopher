@@ -86,13 +86,19 @@ export class StorageService {
     this.projects.emit(this._projects);
   }
 
+  deleteProject(p: Project){
+    delete this._projects[p.ID];
+    this.saveProjects();
+    this.updateProjects();
+  }
+
   // EndPoint
 
   _endpoints: IHash<EndPoint> = {};
   endpoints: EventEmitter<IHash<EndPoint>> = new EventEmitter<IHash<EndPoint>>();
 
   addEndPoint(p: EndPoint){
-    this._endpoints[p.ID] = (p);
+    this._endpoints[p.ID];
     this.saveEndPoints();
     this.updateEndPoints();
   }
