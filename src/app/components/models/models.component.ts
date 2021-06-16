@@ -1,8 +1,9 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, Pipe, PipeTransform, ViewChild} from '@angular/core';
 import {IHash, StorageService} from '../../services/storage/storage.service';
 import {Field, FieldType, initialTypes, Model} from '../../builder/models/model';
 import {IHashPaginator} from '../../util/IHashPaginator';
 import {ToastrService} from 'ngx-toastr';
+import {CustomRelation, RelationsEnum} from '../../builder/models/custom-relation';
 
 @Component({
   selector: 'app-models',
@@ -20,13 +21,7 @@ export class ModelsComponent implements OnInit {
 
   customTypes: Array<FieldType> = [];
 
-  relations: Array<String> = [
-    "oneToOne",
-    "oneToMany",
-    "manyToMany",
-    "manyToOne"
-  ];
-
+  relations = Object.keys(RelationsEnum);
 
   editSelected: boolean = false;
   paginator: IHashPaginator<Model> = new IHashPaginator<Model>();

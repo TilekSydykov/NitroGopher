@@ -22,14 +22,13 @@
           <button class="btn btn-sm btn-light" (click)="paginator.prev()"><</button>&nbsp;
           <button class="btn btn-sm btn-light">{{ paginator.page }} </button>&nbsp;
           <button class="btn btn-sm btn-light" (click)="paginator.next()">></button>
-
         </li>
         <li *ngIf="paginator.currentPageList.length < 1" class="list-group-item">
             <i class="text-secondary">No items</i>
         </li>
         <li (click)="selectProject(project)"
             *ngFor="let project of paginator.currentPageList"
-            [ngClass]="project.ID === selectedProject.ID ? 'bg-gradient-light text-bold' : ''"
+            [ngClass]="project.ID === selectedProjectIndex ? 'bg-gradient-light text-bold' : ''"
             style="cursor: pointer" class="list-group-item">
           <i> &nbsp;{{ project.name }}</i>
         </li>
@@ -45,11 +44,11 @@
         </li>
       </ul>
     </div>
-    <div class="col-md-9" *ngIf="selectedProject.ID != ''">
-      <div class="row" >
+    <div class="col-md-9" *ngIf="selectedProjectIndex != ''">
+      <div class="row">
           <div class="col">
             <h2 class="text-center">
-              {{ selectedProject.name }}
+              {{ projects[selectedProjectIndex].name }}
             </h2>
             <ul class="list-inline nav d-flex">
               <li class="nav-item active">
@@ -75,11 +74,11 @@
               <b>Db connection</b>
             </div>
             <div class="col">
-              <div *ngIf="selectedProject.dbConnection == '' ">
+              <div *ngIf="projects[selectedProjectIndex].dbConnection == '' ">
                 <span class="text-secondary">No connection &nbsp; <i class="click fa fa-plus" (click)="editSelected = true"></i></span>
               </div>
-              <div *ngIf="selectedProject.dbConnection !== ''">
-                {{ connectionsHash[selectedProject.dbConnection].name }}
+              <div *ngIf="projects[selectedProjectIndex].dbConnection !== ''">
+                {{ connectionsHash[projects[selectedProjectIndex].dbConnection].name }}
               </div>
             </div>
           </div>
@@ -89,11 +88,11 @@
               <b>Port</b>
             </div>
             <div class="col">
-              <div *ngIf="selectedProject.port == 0 ">
+              <div *ngIf="projects[selectedProjectIndex].port == 0 ">
                 <span class="text-secondary">No port &nbsp; <i class="click fa fa-plus" (click)="editSelected = true"></i></span>
               </div>
-              <div *ngIf="selectedProject.port !== 0">
-                {{ selectedProject.port }}
+              <div *ngIf="projects[selectedProjectIndex].port !== 0">
+                {{ projects[selectedProjectIndex].port }}
               </div>
             </div>
           </div>
@@ -130,7 +129,7 @@
         </div>
       </div>
       <div *ngIf="selectedTab == 1" class="card h-400">
-          <ng-codeflask [language]="'golang'" [(code)]="selectedProject.code" [contentEditable]="'false'"></ng-codeflask>
+          <ng-codeflask [language]="'golang'" [(code)]="projects[selectedProjectIndex].code" [contentEditable]="'false'"></ng-codeflask>
       </div>
       <div *ngIf="selectedTab == 2" class="card">
         <div class="card-body">
@@ -147,15 +146,15 @@
             </tr>
             <tr>
               <th><b>Name on the project</b></th>
-              <th><input type="text" id="name" class="form-control" [(ngModel)]="selectedProject.name"></th>
+              <th><input type="text" id="name" class="form-control" [(ngModel)]="projects[selectedProjectIndex].name"></th>
             </tr>
             <tr>
               <th><b>Port</b></th>
-              <th><input [(ngModel)]="selectedProject.port" type="number" placeholder="Port" class="form-control" min="1000" max="65534"></th>
+              <th><input [(ngModel)]="projects[selectedProjectIndex].port" type="number" placeholder="Port" class="form-control" min="1000" max="65534"></th>
             </tr>
             <tr>
               <th><b>Database</b></th>
-              <th><select [(ngModel)]="selectedProject.dbConnection" class="form-control">
+              <th><select [(ngModel)]="projects[selectedProjectIndex].dbConnection" class="form-control">
                 <option value="{{ conn.ID }}" *ngFor="let conn of connections">{{ conn.name }}</option>
               </select></th>
             </tr>
@@ -164,21 +163,21 @@
             </tr>
             <tr>
               <th><b>SignIn enabled</b></th>
-              <th><input type="checkbox" [(ngModel)]="selectedProject.security.signInEnabled"></th>
+              <th><input type="checkbox" [(ngModel)]="projects[selectedProjectIndex].security.signInEnabled"></th>
             </tr>
             <tr>
               <th>
                 <b>SignIn Model</b> <br><small>Should contain <b>username</b> and <b>password</b> <br>fields otherwise they will created automatically</small>
               </th>
               <th>
-                <select [(ngModel)]="selectedProject.security.signInModel" class="form-control">
+                <select [(ngModel)]="projects[selectedProjectIndex].security.signInModel" class="form-control">
                   <option value="{{ model.ID }}" *ngFor="let model of models">{{ model.name }}</option>
                 </select>
               </th>
             </tr>
             <tr>
               <th><b>SignUp enabled</b></th>
-              <th><input type="checkbox" [(ngModel)]="selectedProject.security.signUpEnabled"></th>
+              <th><input type="checkbox" [(ngModel)]="projects[selectedProjectIndex].security.signUpEnabled"></th>
             </tr>
             <tr>
              <th>
@@ -199,7 +198,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-9 text-center" *ngIf="selectedProject.ID == ''">
+    <div class="col-md-9 text-center" *ngIf="selectedProjectIndex == ''">
       <i class="text-secondary">select project</i>
     </div>
   </div>

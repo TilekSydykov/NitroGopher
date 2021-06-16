@@ -1,3 +1,5 @@
+import {CustomRelation} from './custom-relation';
+
 export class Model {
   ID: string = "";
   name: string = "";
@@ -8,7 +10,7 @@ export class Model {
 export class Field {
   name: string = "";
   type: FieldType = new FieldType("", "");
-  relationType: string = "oneToOne";
+  relationType: CustomRelation = new CustomRelation();
 }
 
 export class FieldType {

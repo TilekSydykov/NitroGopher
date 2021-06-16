@@ -64,14 +64,15 @@
             <thead>
             <tr>
               <th scope="col">Name</th>
-              <th scope="col">Type</th>
               <th scope="col">Relation</th>
+              <th scope="col">Type</th>
               <th scope="col">Action</th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let field of selectedModel.fields; let i = index">
               <th scope="row">{{ field.name }}</th>
+              <td><span *ngIf="field.type.isCustom">{{ field.relationType.relation.toString() }}</span></td>
               <td>
                 <span *ngIf="!field.type.isCustom">
                   {{ field.type.name }}
@@ -80,13 +81,19 @@
                   {{ models[field.type.value].name }}
                 </span>
               </td>
-              <td>{{ field.relationType }}</td>
               <td><i class="fa fa-trash click" (click)="deleteField(i)"></i></td>
             </tr>
             <tr>
               <th>
                 <input type="text" [(ngModel)]="newField.name" class="form-control" placeholder="name">
               </th>
+              <td>
+                <label>
+                  <select *ngIf="newField.type.isCustom" class="form-control"  [(ngModel)]="newField.relationType.relation" >
+                    <option value="{{ end }}" *ngFor="let end of relations;" selected>{{ end }}</option>
+                  </select>
+                </label>
+              </td>
               <td>
                 <label>
                   <select class="form-control" [(ngModel)]="newField.type"  >
@@ -100,13 +107,7 @@
                   </select>
                 </label>
               </td>
-              <td>
-                <label>
-                  <select *ngIf="newField.type.isCustom" class="form-control"  [(ngModel)]="newField.relationType" >
-                    <option value="{{ end }}" *ngFor="let end of relations;" selected>{{ end }}</option>
-                  </select>
-                </label>
-              </td>
+
               <td>
                 <button class="btn btn-success" (click)="addField()">Add</button>
               </td>

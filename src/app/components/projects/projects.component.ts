@@ -6,7 +6,6 @@ import {EndPoint} from '../../builder/models/end-point';
 import {IHashPaginator} from '../../util/IHashPaginator';
 import {CodeEngine} from '../../builder/engine/code-engine';
 import {Model} from '../../builder/models/model';
-import {Param} from '../../util/Functions';
 
 @Component({
   selector: 'app-projects',
@@ -21,7 +20,7 @@ export class ProjectsComponent implements OnInit {
   selectedTab = 0;
 
   projects: IHash<Project> = {};
-  selectedProject: Project = new Project();
+  selectedProjectIndex: string = "";
   newProject: Project = new Project();
 
   connections: Array<DbConnection> = [];
@@ -85,38 +84,40 @@ export class ProjectsComponent implements OnInit {
 
   saveSelected() {
     this.editSelected = false;
-    this.storageService.saveProject(this.selectedProject);
+    this.storageService.saveProject(this.projects[this.selectedProjectIndex]);
   }
 
   addEndpoint() {
-    this.selectedProject.endPoints[this.newEndPoint.key] = this.newEndPoint;
+    this.projects[this.selectedProjectIndex].endPoints[this.newEndPoint.key] = this.newEndPoint;
     this.newEndPoint = new EndPointReference();
+    this.endPointPaginator.update(this.projects[this.selectedProjectIndex].endPoints);
+    this.endPointPaginator.getPage();
     this.saveSelected();
   }
 
   selectProject(project: Project) {
-    this.selectedProject = this.projects[project.ID];
+    this.selectedProjectIndex = project.ID;
     this.generateCode();
-    this.endPointPaginator.update(this.selectedProject.endPoints);
+    this.endPointPaginator.update(this.projects[this.selectedProjectIndex].endPoints);
     this.endPointPaginator.getPage();
   }
 
   generateCode() {
-    this.selectedProject.code =
-      this.codeEngine.generateProjectCode(this.selectedProject,
+    this.projects[this.selectedProjectIndex].code =
+      this.codeEngine.generateProjectCode(this.projects[this.selectedProjectIndex],
         this.modelsHash,
         this.endpointsHash,
         this.connectionsHash);
-    this.selectedProject.codeVersion = this.selectedProject.version;
-    this.storageService.saveProject(this.selectedProject);
+    this.projects[this.selectedProjectIndex].codeVersion = this.projects[this.selectedProjectIndex].version;
+    this.storageService.saveProject(this.projects[this.selectedProjectIndex]);
   }
 
   deleteSelected(){
     let ok = confirm("You want to delete this project?");
     console.log(ok);
     if (ok){
-      this.storageService.deleteProject(this.selectedProject);
-      this.selectedProject = new Project()
+      this.storageService.deleteProject(this.projects[this.selectedProjectIndex]);
+      this.selectedProjectIndex = "";
     }
   }
 }
