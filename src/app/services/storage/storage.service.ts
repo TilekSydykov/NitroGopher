@@ -1,7 +1,6 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {User} from "../../models/user";
 import {Project} from '../../builder/models/project';
-import {Observable} from 'rxjs';
 import {EndPoint} from '../../builder/models/end-point';
 import {Model} from '../../builder/models/model';
 import {DbConnection} from '../../builder/models/db-connection';
@@ -34,7 +33,7 @@ export class StorageService {
     return <string>localStorage.getItem('token');
   }
 
-  static  token(): string{
+  static token(): string{
     return <string>localStorage.getItem('token');
   }
 
@@ -86,13 +85,19 @@ export class StorageService {
     this.projects.emit(this._projects);
   }
 
+  deleteProject(p: Project){
+    delete this._projects[p.ID];
+    this.saveProjects();
+    this.updateProjects();
+  }
+
   // EndPoint
 
   _endpoints: IHash<EndPoint> = {};
   endpoints: EventEmitter<IHash<EndPoint>> = new EventEmitter<IHash<EndPoint>>();
 
   addEndPoint(p: EndPoint){
-    this._endpoints[p.ID] = (p);
+    this._endpoints[p.ID];
     this.saveEndPoints();
     this.updateEndPoints();
   }
